@@ -1,18 +1,43 @@
 import React from 'react';
-import { Label } from './Filter.styled';
-import { useDispatch } from 'react-redux';
-import { setFilter } from 'redux/FilterSlice';
+import { getFilter } from 'redux/contacts/contact-selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { filterContacts } from 'redux/contacts/contacts-actions';
+import { Box, Container, InputAdornment, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Filter() {
+  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-  const handleChange = evt => {
-    const value = evt.currentTarget.value;
-    dispatch(setFilter(value));
-  };
+
   return (
-    <Label>
-      Find contacts by Name
-      <input onChange={handleChange} type="text" name="filter" />
-    </Label>
+    <>
+      <Container>
+        <Box
+          sx={{
+            marginTop: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <TextField
+            margin="normal"
+            size="small"
+            id="filter"
+            label="Find contacts by name"
+            name="filter"
+            value={filter}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            onChange={e => dispatch(filterContacts(e.currentTarget.value))}
+          />
+        </Box>
+      </Container>
+    </>
   );
 }
